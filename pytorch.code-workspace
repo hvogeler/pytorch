@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "esp1",
+			"path": "../Platio/esp1"
+		},
+		{
+			"name": "mftft2",
+			"path": "../Platio/mftft2"
+		},
+		{
+			"name": "wlora2",
+			"path": "../Platio/wlora2"
+		},
+		{
+			"name": "relay1",
+			"path": "../Platio/relay1"
+		}
+	],
+	"settings": {}
+}
