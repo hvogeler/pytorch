@@ -9,7 +9,6 @@ from sklearn.preprocessing import LabelEncoder
 # this object needs to be pickled to disk. The pickle file needs to be distributed
 # along with the Onnx model export.
 #
-
 class Landing_Club_Wrapper(ModelWrapper):
     def __init__(self, scaler_X: StandardScaler, scaler_y: StandardScaler, label_encoder: LabelEncoder):
         super().__init__()
@@ -20,12 +19,20 @@ class Landing_Club_Wrapper(ModelWrapper):
     # feature_row has the form [0.1, 0.2, 0.3]
     def preprocess(self, feature_row):
         feature_list = feature_row.copy()
-        encoded_home_owner = self.label_encoder.transform([feature_list[1]])[0]
+
+        encoded_home_owner = Landing_Club_Wrapper.standardize(
+            self.label_encoder,
+            [feature_list[1]]
+        )[0]
+
         feature_list[1] = encoded_home_owner
         features = np.asarray(feature_list)
 
         scaled = Landing_Club_Wrapper.standardize(
-            self.scaler_X, [features], False)
+            self.scaler_X,
+            [features], False
+        )
+
         return scaled[0]
 
     # label_array is a one dimensional array like [0.2]
