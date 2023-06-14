@@ -6,7 +6,7 @@ from landing_club_wrapper import Landing_Club_Wrapper
 
 wrapper_file = open('landing_club/landing_club_wrapper.pickle', 'rb')
 wrapper: Landing_Club_Wrapper = p.load(wrapper_file)
-# feature_list = [3600.0, 'MORTGAGE', 40000.0]
+# feature_list = [3600.0, 'RENT', 40000.0]
 # print(f'features = {feature_list}')
 # p1 = wrapper.preprocess(feature_list)
 # print(f'p1: {p1}')

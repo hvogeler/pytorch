@@ -16,9 +16,8 @@ class Landing_Club_Wrapper(ModelWrapper):
         self.scaler_y = scaler_y
         self.label_encoder = label_encoder
 
-    # feature_row has the form [0.1, 0.2, 0.3]
-    def preprocess(self, feature_row):
-        feature_list = feature_row.copy()
+    def preprocess(self, loan_amt: float, home_ownership: str, annual_inc: float) -> list:
+        feature_list = [loan_amt, home_ownership, annual_inc]
 
         encoded_home_owner = Landing_Club_Wrapper.standardize(
             self.label_encoder,
@@ -33,12 +32,11 @@ class Landing_Club_Wrapper(ModelWrapper):
             [features], False
         )
 
-        return scaled[0]
+        return scaled[0].tolist()
 
     # label_array is a one dimensional array like [0.2]
-    def postprocess(self, label_array):
-        # inverse_transform expects a 2-dimensional array like [[0.2]]
-        return self.scaler_y.inverse_transform([label_array])
+    def postprocess(self, prediction: float) -> float:
+        return self.scaler_y.inverse_transform([[prediction]])[0].item()
 
     def standardize(scaler, values, fit=False):
         if (fit):

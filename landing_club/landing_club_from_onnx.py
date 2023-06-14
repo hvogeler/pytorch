@@ -50,9 +50,10 @@ wrapper_file = open('landing_club_wrapper.pickle', 'rb')
 wrapper: Landing_Club_Wrapper = p.load(wrapper_file)
 
 for i in range(2):
-    prepared_features = np.asarray(wrapper.preprocess(X[i])).astype(np.float32)
-    predict = ort_session.run(['label'], {'features': [prepared_features]})
-    post_predict = wrapper.postprocess(predict[0].reshape(-1))
+    print(X[i])
+    prepared_features = np.asarray(wrapper.preprocess(X[i, 0], X[i, 1], X[i, 2])).astype(np.float32)
+    predict = ort_session.run(['prediction'], {'features': [prepared_features]})
+    post_predict = wrapper.postprocess(predict[0].item())
     print(f'{X[i]} -> {prepared_features} -> {post_predict}')
 
 
