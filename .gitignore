@@ -2,3 +2,4 @@
 */**/data/landing_club/
 */**/*.pickle
 */**/*.onnx
+*/**/__pycache__/

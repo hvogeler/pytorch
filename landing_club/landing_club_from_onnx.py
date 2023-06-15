@@ -1,40 +1,31 @@
 # %%
-import pandas as pd
-import torch
-import torch.nn as nn
-import numpy as np
 import pickle as p
-from sklearn.model_selection import train_test_split
-from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import OneHotEncoder
-from sklearn.preprocessing import LabelEncoder
-from sklearn.preprocessing import LabelBinarizer
+import pandas as pd
+import numpy as np
 import onnx
 import onnxruntime
 
-from landing_club_wrapper import Landing_Club_Wrapper
-
-import matplotlib.pyplot as plt
+from landing_club_wrapper import LandingClubWrapper
 
 # %%
 # Read Data
 SMALL_SAMPLE_DATASET_NAME = 'data/landing_club/accepted_2007_to_2018Q4_small_sample.csv'
 acc_raw_df = pd.read_csv(SMALL_SAMPLE_DATASET_NAME)
-# col_names = ['loan_amnt', 'home_ownership', 'annual_inc', 'purpose', 'addr_state', 'term', 'emp_length', 'int_rate']
-# col_names = ['loan_amnt', 'home_ownership', 'annual_inc','term', 'emp_length', 'int_rate']
-col_names = ['loan_amnt', 'home_ownership', 'annual_inc', 'int_rate']
-col_label = 'int_rate'
+# COL_NAMES = ['loan_amnt', 'home_ownership', 'annual_inc', 'purpose', 'addr_state', 'term', 'emp_length', 'int_rate']
+# COL_NAMES = ['loan_amnt', 'home_ownership', 'annual_inc','term', 'emp_length', 'int_rate']
+COL_NAMES = ['loan_amnt', 'home_ownership', 'annual_inc', 'int_rate']
+COL_LABEL = 'int_rate'
 
 
 # %%
 # Remove records with nan
-acc_df = acc_raw_df.loc[:, col_names]
+acc_df = acc_raw_df.loc[:, COL_NAMES]
 print(acc_df)
 
 # %%
 # DataFrame to Numpy array
-X_df = acc_df.drop(columns=[col_label])
-y_df = acc_df[col_label]
+X_df = acc_df.drop(columns=[COL_LABEL])
+y_df = acc_df[COL_LABEL]
 X = X_df.to_numpy()
 y = y_df.to_numpy()
 
@@ -47,7 +38,7 @@ ort_session = onnxruntime.InferenceSession("landing_club_model.onnx")
 
 # %%
 wrapper_file = open('landing_club_wrapper.pickle', 'rb')
-wrapper: Landing_Club_Wrapper = p.load(wrapper_file)
+wrapper: LandingClubWrapper = p.load(wrapper_file)
 
 for i in range(2):
     print(X[i])

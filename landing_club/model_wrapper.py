@@ -55,11 +55,11 @@ class ModelWrapper:
     def __init__(self):
         pass
 
-    def preprocess(self, features):
+    def preprocess(self, loan_amt: float, home_ownership: str, annual_inc: float) -> list:
         print('Please override the preprocess method!')
         sys.exit(1)
         pass
 
-    def postprocess(self, labels):
+    def postprocess(self, prediction: float) -> float:
         print('Please override the preprocess method!')
         sys.exit(1)
