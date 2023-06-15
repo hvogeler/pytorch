@@ -38,7 +38,6 @@ class LandingClubWrapper:
 
         return scaled[0].tolist()
 
-    # label_array is a one dimensional array like [0.2]
     def postprocess(self, prediction: float) -> float:
         '''Post process the model prediction'''
         return self.scaler_y.inverse_transform([[prediction]])[0].item()
