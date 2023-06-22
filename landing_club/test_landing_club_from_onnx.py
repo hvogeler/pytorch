@@ -5,7 +5,7 @@ import numpy as np
 import onnx
 import onnxruntime
 
-from landing_club_wrapper import LandingClubWrapper
+from landing_club_prepost import LandingClubPrePost
 
 # %%
 # Read Data
@@ -38,7 +38,7 @@ ort_session = onnxruntime.InferenceSession("landing_club_model.onnx")
 
 # %%
 wrapper_file = open('landing_club_wrapper.pickle', 'rb')
-wrapper: LandingClubWrapper = p.load(wrapper_file)
+wrapper: LandingClubPrePost = p.load(wrapper_file)
 
 for i in range(2):
     print(X[i])

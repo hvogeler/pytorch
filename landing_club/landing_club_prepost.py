@@ -1,5 +1,5 @@
 '''
-Model wrapper for pre- and post-processing. After the preprocessing state is set
+Pre- and post-processing. After the preprocessing state is set
 this object needs to be pickled to disk. The pickle file needs to be distributed
 along with the Onnx model export.
 '''
@@ -8,7 +8,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.preprocessing import LabelEncoder
 
-class LandingClubWrapper:
+class LandingClubPrePost:
     '''Wrapper class for pre and post processing methods for this model'''
     def __init__(self,
                  scaler_x: StandardScaler,
@@ -23,7 +23,7 @@ class LandingClubWrapper:
         '''Pre process features'''
         feature_list = [loan_amt, home_ownership, annual_inc]
 
-        encoded_home_owner = LandingClubWrapper.standardize(
+        encoded_home_owner = LandingClubPrePost.standardize(
             self.label_encoder,
             [feature_list[1]]
         )[0]
@@ -31,7 +31,7 @@ class LandingClubWrapper:
         feature_list[1] = encoded_home_owner
         features = np.asarray(feature_list)
 
-        scaled = LandingClubWrapper.standardize(
+        scaled = LandingClubPrePost.standardize(
             self.scaler_x,
             [features], False
         )
