@@ -25,19 +25,14 @@ class LandingClubPrePost:
         nparr = np.array([home_ownership]).reshape(-1, 1)
         encoded_home_owner = self.cat_encoder.transform(nparr)
 
-        print(encoded_home_owner[0])
         feature_list = [loan_amt, annual_inc]
-        print("DUDEL1")
-        print(feature_list)
         feature_list = feature_list + encoded_home_owner[0].tolist()
-        print(feature_list)
         features = np.asarray(feature_list)
 
         scaled = LandingClubPrePost.standardize(
             self.scaler_x,
             [features], False
         )
-        print(scaled)
         return scaled[0].tolist()
 
     def postprocess(self, prediction: float) -> float:
