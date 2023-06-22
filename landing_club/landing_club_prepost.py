@@ -6,36 +6,38 @@ along with the Onnx model export.
 
 import numpy as np
 from sklearn.preprocessing import StandardScaler
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import OneHotEncoder
 
 class LandingClubPrePost:
     '''Wrapper class for pre and post processing methods for this model'''
     def __init__(self,
                  scaler_x: StandardScaler,
                  scaler_y: StandardScaler,
-                 label_encoder: LabelEncoder):
+                 cat_encoder: OneHotEncoder):
         super().__init__()
         self.scaler_x = scaler_x
         self.scaler_y = scaler_y
-        self.label_encoder = label_encoder
+        self.cat_encoder = cat_encoder
 
     def preprocess(self, loan_amt: float, home_ownership: str, annual_inc: float) -> list:
         '''Pre process features'''
         feature_list = [loan_amt, home_ownership, annual_inc]
+        nparr = np.array([home_ownership]).reshape(-1, 1)
+        encoded_home_owner = self.cat_encoder.transform(nparr)
 
-        encoded_home_owner = LandingClubPrePost.standardize(
-            self.label_encoder,
-            [feature_list[1]]
-        )[0]
-
-        feature_list[1] = encoded_home_owner
+        print(encoded_home_owner[0])
+        feature_list = [loan_amt, annual_inc]
+        print("DUDEL1")
+        print(feature_list)
+        feature_list = feature_list + encoded_home_owner[0].tolist()
+        print(feature_list)
         features = np.asarray(feature_list)
 
         scaled = LandingClubPrePost.standardize(
             self.scaler_x,
             [features], False
         )
-
+        print(scaled)
         return scaled[0].tolist()
 
     def postprocess(self, prediction: float) -> float:

@@ -37,7 +37,7 @@ onnx.checker.check_model(model)
 ort_session = onnxruntime.InferenceSession("landing_club_model.onnx")
 
 # %%
-wrapper_file = open('landing_club_wrapper.pickle', 'rb')
+wrapper_file = open('landing_club_prepost.pickle', 'rb')
 wrapper: LandingClubPrePost = p.load(wrapper_file)
 
 for i in range(2):
@@ -46,6 +46,7 @@ for i in range(2):
     predict = ort_session.run(['prediction'], {'features': [prepared_features]})
     post_predict = wrapper.postprocess(predict[0].item())
     print(f'{X[i]} -> {prepared_features} -> {post_predict}')
-
+    print(wrapper.scaler_x.inverse_transform([[-1.2608404,  -0.39100227, -0.9965061,  -0.35781503,  1.255253  ]]))
+    print(wrapper.cat_encoder.inverse_transform([[1.80926996e-09, -4.79131558e-09, 1.00000002e+00]]))
 
 # %%
