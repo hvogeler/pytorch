@@ -13,15 +13,17 @@ import matplotlib.pyplot as plt
 import pickle as p
 from landing_club_prepost import LandingClubPrePost
 
-
 class Landing_Club_Dataset(Dataset):
-    def __init__(self, file_path: str, col_label, col_names = []):
+    def __init__(self, file_path: str, col_label, col_names = [], nominal_cols = [], ordinal_cols = []):
         self.sc_x = StandardScaler()
         self.sc_y = StandardScaler()
         self.one_hot_enc = OneHotEncoder(sparse=False)
+        self.label_enc = LabelEncoder()
         self.file_path = file_path
         self.col_label = col_label
         self.col_names = col_names
+        self.ordinal_cols = ordinal_cols
+        self.nominal_cols = nominal_cols
         self.read_and_preprocess_datafile()
         
     def read_and_preprocess_datafile(self):
@@ -52,18 +54,15 @@ class Landing_Club_Dataset(Dataset):
         return
     
     def encode_categorical_columns(self):
-        categorical_cols = list(self.X_df.select_dtypes(include=['object']))
-        for col in categorical_cols:
+        for col in self.ordinal_cols:
             categories = self.X_df[col].to_numpy().reshape(-1,1)
             oh_encoded = self.one_hot_enc.fit_transform(categories)
             oh_df = pd.DataFrame(oh_encoded, columns=self.one_hot_enc.get_feature_names_out())
             self.X_df = self.X_df.join(oh_df)
             self.X_df.drop(columns=[col], inplace=True)
-            print('AAAAAAAA')
-            print(self.X_df)
-            # label_encoded = self.label_enc.fit_transform(self.X_df[col])
-            # self.X_df[col] = label_encoded
-            # self.X_df = pd.get_dummies(self.X_df, columns=['home_ownership'])
+        for col in self.nominal_cols:
+            label_encoded = self.label_enc.fit_transform(self.X_df[col])
+            self.X_df[col] = label_encoded
 
     def split_features_and_labels(self):
         self.X_df = self.df.drop(columns=[self.col_label])
